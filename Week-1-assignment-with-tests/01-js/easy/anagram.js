@@ -17,7 +17,7 @@ function isAnagram(str1, str2) {
   str1An = str1An.join('');
   str2An = str2An.join('');
 
-  if(str1An === str2An){
+  if (str1An === str2An) {
     return true;
   }
 
