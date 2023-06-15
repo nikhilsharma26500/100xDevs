@@ -8,8 +8,8 @@
 */
 
 function isAnagram(str1, str2) {
-  var str1An = str1.split('');
-  var str2An = str2.split('');
+  var str1An = str1.toLowerCase().split('');
+  var str2An = str2.toLowerCase().split('');
 
   str1An.sort();
   str2An.sort();
