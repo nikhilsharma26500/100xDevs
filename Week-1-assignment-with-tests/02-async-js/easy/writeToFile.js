@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var str = "brud"
+var str = "abc"
 
 fs.writeFile('./sample.txt', str, function(err) {
     if (err) return console.log(err);
