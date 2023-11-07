@@ -28,9 +28,9 @@ const directoryPath = path.join(__dirname, "./files");
 app.get("/files", (req, res) => {
   fs.readdir(directoryPath, (err, fileList) => {
     if (err) {
-      return req.status(404).send();
+      return res.status(404).send();
     } else {
-      return req.status(200).json(fileList);
+      return res.status(200).json(fileList);
     }
   });
 });

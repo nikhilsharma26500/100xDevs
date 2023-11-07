@@ -29,9 +29,40 @@
   Testing the server - run `npm run test-authenticationServer` command in terminal
  */
 
-const express = require("express")
+const express = require("express");
 const PORT = 3000;
 const app = express();
 // write your logic here, DONT WRITE app.listen(3000) when you're running tests, the tests will automatically start the server
+
+let userData = [];
+
+app.post("/signup", (req, res) => {
+  const newUser = {
+    id: Math.floor(Math.random() * 100000),
+    username: req.body.username,
+    password: req.body.password,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+  };
+
+  const userCheck = userData.some((user) => user.username === newUser.username);
+
+  if (!userCheck) {
+    userData.push(newUser);
+    return res.status(200).send("User Account Created");
+  } else {
+    return res.status(401).send("User already exists");
+  }
+});
+
+app.post("/login", (req, res) => {
+  
+});
+
+app.get("/data", (req, res) => {});
+
+app.use((res, req) => {
+  return req.status(404).send("File not found");
+});
 
 module.exports = app;
