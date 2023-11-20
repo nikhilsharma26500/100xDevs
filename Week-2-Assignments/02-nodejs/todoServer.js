@@ -96,4 +96,6 @@ app.use((req, res) => {
   return res.status(404);
 });
 
+
+app.listen(3001)
 module.exports = app;

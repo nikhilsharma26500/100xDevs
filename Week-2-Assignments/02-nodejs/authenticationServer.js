@@ -56,10 +56,18 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
+  const user = req.body.username
+  const pass = req.body.password
+
   
+
+  return res.status(401).send("Credentials are invalid")
+  return res.status(200).json(retrvUser)
 });
 
-app.get("/data", (req, res) => {});
+app.get("/data", (req, res) => {
+
+});
 
 app.use((res, req) => {
   return req.status(404).send("File not found");
