@@ -7,7 +7,7 @@ let ADMINS = [];
 let USERS = [];
 let COURSES = [];
 
-// Middlewares for ADMIN
+////////////////////////// Middleware for ADMIN ////////////////////////
 const adminAuth = (req, res, next) => {
   const { username, password } = req.headers;
   const existingAdmin = ADMINS.find(
@@ -20,7 +20,9 @@ const adminAuth = (req, res, next) => {
   }
 };
 
-// Admin routes
+//////////////////////// Middleware for USER ////////////////////////
+
+//////////////////////// Admin routes ////////////////////////
 app.post("/admin/signup", (req, res) => {
   // logic to sign up admin
   const admin = req.body;
@@ -61,11 +63,15 @@ app.put("/admin/courses/:courseId", adminAuth, (req, res) => {
   }
 });
 
-app.get("/admin/courses", (req, res) => {
+app.get("/admin/courses", adminAuth, (req, res) => {
   // logic to get all courses
+  res.status(200).json({courses: COURSES})
 });
 
-// User routes
+
+
+
+//////////////////////// User routes ////////////////////////
 app.post("/users/signup", (req, res) => {
   // logic to sign up user
 });
