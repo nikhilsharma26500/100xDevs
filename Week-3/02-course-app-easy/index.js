@@ -27,6 +27,7 @@ const userAuth = (req, res, next) => {
     (u) => u.username === username && u.password === password
   );
   if (existingUser) {
+    req.user = existingUser
     next();
   } else {
     res.status(404).json({ message: "User not found!" });
@@ -113,8 +114,16 @@ app.get("/users/courses", userAuth, (req, res) => {
   res.json({ Courses: CourseList });
 });
 
-app.post("/users/courses/:courseId", (req, res) => {
+app.post("/users/courses/:courseId", userAuth, (req, res) => {
   // logic to purchase a course
+  const courseID = parseInt(req.params.courseId)
+  const course = COURSES.find(c => c.id === courseID && c.published)
+  if(course){
+    req.user.PuchasedCourse.push(course)
+    res.status(200).json(message: "Course added!")
+  }else{
+    req.status(401).json({message: "Course could not found or available."})
+  }
 });
 
 app.get("/users/purchasedCourses", (req, res) => {
