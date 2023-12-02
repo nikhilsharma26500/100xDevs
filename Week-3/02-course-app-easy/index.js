@@ -38,8 +38,14 @@ app.post("/admin/login", adminAuth, (req, res) => {
   res.status(200).json({ message: "Logged in successfully!" });
 });
 
-app.post("/admin/courses", (req, res) => {
+let courseID = 0
+app.post("/admin/courses", adminAuth, (req, res) => {
   // logic to create a course
+  const course = req.body
+
+  course.id = ++courseID
+  COURSES.push(course)
+  res.json({message: "Course was added successfully!", courseID: course.id})
 });
 
 app.put("/admin/courses/:courseId", (req, res) => {
