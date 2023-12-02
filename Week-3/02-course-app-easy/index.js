@@ -86,24 +86,31 @@ app.post("/users/signup", (req, res) => {
   const user = {
     username: req.body.username,
     password: req.body.password,
-    PuchasedCourse: []
-  }
-  const existingUser = USERS.find(u => u.username === user.username)
-  if (existingUser){
-    res.status(401).json({message: "User already exists!"})
-  }else{
-    USERS.push(user)
-    res.status(200).json({message: "User Account Created!"})
+    PuchasedCourse: [],
+  };
+  const existingUser = USERS.find((u) => u.username === user.username);
+  if (existingUser) {
+    res.status(401).json({ message: "User already exists!" });
+  } else {
+    USERS.push(user);
+    res.status(200).json({ message: "User Account Created!" });
   }
 });
 
 app.post("/users/login", userAuth, (req, res) => {
   // logic to log in user
-  res.status(200).json({message: "User logged in successfully!"})
+  res.status(200).json({ message: "User logged in successfully!" });
 });
 
-app.get("/users/courses", (req, res) => {
+app.get("/users/courses", userAuth, (req, res) => {
   // logic to list all courses
+  let CourseList = [];
+  for (let i = 0; i < COURSES.length; i++) {
+    if (COURSES[i].published) {
+      CourseList.push(COURSES[i]);
+    }
+  }
+  res.json({ Courses: CourseList });
 });
 
 app.post("/users/courses/:courseId", (req, res) => {
