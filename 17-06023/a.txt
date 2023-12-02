@@ -1,0 +1,59 @@
+This has been my best experience working on a software related project. Mr Saad Ashfaq (my mentor in this project) from Plare AI were always available through virtual meetings and Microsoft Teams to help me guide on every step of this projects.
+I will break down the work I did here below:
+
+- Project was about converting older raw SQL injection based code to turn into SQLAlchemy for smoother and scalable automated injections into the database.
+
+- Created 3 python scripts - Database Schema (4 Tables), Functions to manipulate the tables and the values in them, Tests to test out of the older code and my new refactored code was giving the same results.
+
+- I got to know about how MySQL database is different from regular SQL or SQLAlchemy based database.
+
+- Spent time learing Pytest but later when talking to Mr Saad it was decided that we would be using convetional debugging tools that comes with VS Code IDE.
+
+- Database was using UNIX timestamp schema which was a completely new concept for me.
+
+- Made sure to create a test for every function that I create to produce a bug free codebase, which is something that Mr Saad recommended me from his professional experience.
+
+- Some functions were very tricky to work with and could not be finished until the very end.
+
+- Finally by the deadline, with Mr Saad's guidance, I was able to finish and test all the functions and was able to give a workable solution.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+I am thrilled to share my recent experience working on a software project with Plare AI, which has been a great learning journey. My mentor, Mr. Saad Ashfaq from Plare AI, was an invaluable resource, providing guidance at every step of the project through virtual meetings and Microsoft Teams.
+
+Here's a breakdown of my contributions:
+
+- The project involved transitioning from raw SQL injection-based code to SQLAlchemy for more efficient and scalable automated database injections.
+
+- I developed three Python scripts: one for the Database Schema (comprising four tables), one for functions to manipulate the tables and their values, and one for tests to ensure the refactored code produced the same results as the old code.
+
+- This project gave me the opportunity to understand the differences between MySQL databases and regular SQL or SQLAlchemy-based databases.
+
+- Initially, I spent time learning Pytest, but after discussions with Mr. Saad, we decided to use the conventional debugging tools provided by the VS Code IDE.
+
+- The database used a UNIX timestamp schema, a concept that was new to me.
+
+- We utilized the functionalities provided by Github a lot which included branching, Github Project and Issues to get the work done in more professional sense.
+
+- Following Mr. Saad's professional advice, I created a test for each function to ensure a bug-free codebase.
+
+- Some functions posed significant challenges and took until the end of the project to complete.
+
+- By the deadline, under Mr. Saad's guidance, I successfully completed and tested all functions, providing a workable solution.
+
+This project was a fantastic learning experience, and I'm grateful for the opportunity to work with Mr. Saad and Plare AI. Despite the challenges, the sense of accomplishment I feel is immense. I look forward to applying the knowledge and skills I've gained in future projects. Thank you.
