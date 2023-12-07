@@ -17,10 +17,9 @@ const generateJWT = (user) => {
 };
 
 const authenticateJwt = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers["authorization"];
 
   if (authHeader) {
-
     const token = authHeader.split(" ")[1];
     jwt.verify(token, secretKey, (err, user) => {
       if (err) {
@@ -28,13 +27,11 @@ const authenticateJwt = (req, res, next) => {
       }
       req.user = user;
       next();
-      
     });
   } else {
     res.status(401).send("Error here 2");
   }
 };
-
 
 ////////////////////////// Middleware for USER //////////////////////////
 
@@ -80,6 +77,17 @@ app.post("/admin/courses", authenticateJwt, (req, res) => {
 
 app.put("/admin/courses/:courseId", authenticateJwt, (req, res) => {
   // logic to edit a course
+  const courseID = parseInt(res.params.courseID);
+
+  const courseIndex = COURSES.findIndex((c) => c.id === courseID);
+
+  if (courseIndex > -1) {
+    const update = { ...COURSES[courseIndex], ...req.body };
+    COURSES[courseIndex] = update;
+    res.status(200).json({ message: "Course added successfully!" });
+  } else {
+    res.status(401).json({ message: "Course could not be added" });
+  }
 });
 
 app.get("/admin/courses", authenticateJwt, (req, res) => {
