@@ -12,7 +12,33 @@ const secretKey = "h3ll0w0r1d"
 
 ////////////////////////// Middleware for ADMIN //////////////////////////
 const generateJWT = (value) => {
-  return jwt.sign(value, secretKey, {noTimestamp: true, expiresIn: '1hr'})
+
+  const payload = { username: value.username }
+  return jwt.sign(payload, secretKey, { noTimestamp: true, expiresIn: '1hr' })
+
+}
+
+const authentication = (req, res, next) => {
+
+  const authHeader = req.headers.authentication
+
+  if (authHeader) {
+
+    const token = authHeader.split(' ')[1]
+    jwt.verify(token, secretKey, (err, user) => {
+      if (err) {
+        res.sendStatus(401)
+      }
+
+      req.user = user
+      next()
+    })
+
+  } else {
+
+    res.sendStatus(401)
+
+  }
 }
 
 ////////////////////////// Middleware for USER //////////////////////////
@@ -23,18 +49,26 @@ app.post("/admin/signup", (req, res) => {
   // logic to sign up admin
   const admin = req.body
   const existingAdmin = ADMINS.find(a => a.username === admin.username)
-  if(existingAdmin){
-    res.status(401).json({message: "This admin account already exists"})
-  }else{
+  if (existingAdmin) {
+    res.status(401).json({ message: "This admin account already exists" })
+  } else {
     ADMINS.push(admin)
     const token = generateJWT(admin)
-    res.status(200).json({message: "Admin account created!", token})
+    res.status(200).json({ message: "Admin account created!", token })
   }
 });
 
-app.post("/admin/login", (req, res) => {
+app.post("/admin/login", authentication, (req, res) => {
   // logic to log in admin
-  
+  const { username, password } = req.headers
+
+  const admin = ADMINS.find(a => a.username === username && a.password === password)
+  if(admin){
+    const token = generateJWT(admin)
+    res.status(200).json({message: "Admin logged in successfully!"})
+  }else{
+    res.status(401).json({message: "Admin does not exist."})
+  }
 });
 
 app.post("/admin/courses", (req, res) => {
