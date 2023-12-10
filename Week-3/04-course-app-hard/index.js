@@ -10,12 +10,12 @@ require("dotenv").config();
 const USER = new MongoDB.Schema({
   username: String,
   password: String,
-  purchasedCourse: [{type: MongoDB.Schema.Types.ObjectId, ref: 'Course'}]
+  purchasedCourse: [{ type: MongoDB.Schema.Types.ObjectId, ref: "Course" }],
 });
 
 const ADMIN = new MongoDB.Schema({
   username: String,
-  password: String
+  password: String,
 });
 
 const COURSE = new MongoDB.Schema({
@@ -27,9 +27,28 @@ const COURSE = new MongoDB.Schema({
 });
 
 // Database Models
-const User = MongoDB.model("USER", USER)
-const Admin = MongoDB.model("ADMIN", ADMIN)
-const Course = MongoDB.model("COURSE", COURSE)
+const User = MongoDB.model("USER", USER);
+const Admin = MongoDB.model("ADMIN", ADMIN);
+const Course = MongoDB.model("COURSE", COURSE);
+
+// Auth Middleware
+const secret = "h3ll0w0r1d";
+
+const auth = (req, res, next) => {
+  const auth = req.headers.authorization;
+  if (auth) {
+    const token = auth.split(" ")[1];
+    jwt.verify(token, secret, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
 
 // Admin routes
 app.post("/admin/signup", (req, res) => {
