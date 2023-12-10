@@ -4,7 +4,7 @@ const MongoDB = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 app.use(express.json());
-require("dotenv").config();
+require("dotenv").config({path: __dirname + '/../.env'});
 
 // Database Schemas
 const USER = new MongoDB.Schema({
@@ -51,44 +51,55 @@ const auth = (req, res, next) => {
 };
 
 // Admin routes
-app.post("/admin/signup", (req, res) => {
+app.post("/admin/signup", async (req, res) => {
   // logic to sign up admin
+  const { username, password } = req.body;
+  const admin = await Admin.findOne({ username, password });
+  if(admin){
+    res.status(403).json({message: "Admin account alreadt exists!"})
+  }else{
+    const obj = {username: username, password: password}
+    const adminVal = new Admin(obj)
+    adminVal.save()
+    const token = jwt.sign({username, role: 'admin'}, secret, {expiresIn: '1hr'})
+    res.status(200).json({message: "Admin account created successfully!", token})
+  }
 });
 
-app.post("/admin/login", (req, res) => {
+app.post("/admin/login", async (req, res) => {
   // logic to log in admin
 });
 
-app.post("/admin/courses", (req, res) => {
+app.post("/admin/courses", auth, async (req, res) => {
   // logic to create a course
 });
 
-app.put("/admin/courses/:courseId", (req, res) => {
+app.put("/admin/courses/:courseId", auth, async (req, res) => {
   // logic to edit a course
 });
 
-app.get("/admin/courses", (req, res) => {
+app.get("/admin/courses", auth, async (req, res) => {
   // logic to get all courses
 });
 
 // User routes
-app.post("/users/signup", (req, res) => {
+app.post("/users/signup", async (req, res) => {
   // logic to sign up user
 });
 
-app.post("/users/login", (req, res) => {
+app.post("/users/login", async (req, res) => {
   // logic to log in user
 });
 
-app.get("/users/courses", (req, res) => {
+app.get("/users/courses", auth, async (req, res) => {
   // logic to list all courses
 });
 
-app.post("/users/courses/:courseId", (req, res) => {
+app.post("/users/courses/:courseId", auth, async (req, res) => {
   // logic to purchase a course
 });
 
-app.get("/users/purchasedCourses", (req, res) => {
+app.get("/users/purchasedCourses", auth, async (req, res) => {
   // logic to view purchased courses
 });
 
