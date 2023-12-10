@@ -4,19 +4,32 @@ const MongoDB = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 app.use(express.json());
-require("dotenv").config()
+require("dotenv").config();
 
-// URL Connect Link to database
-const DB_USERNAME = process.env.DB_USERNAME
-const DB_PASSWORD = process.env.DB_PASSWORD
-const DB_CLUSTER_NAME = process.env.DB_CLUSTER_NAME
-const DB_NAME = process.env.DB_NAME
+// Database Schemas
+const USER = new MongoDB.Schema({
+  username: String,
+  password: String,
+  purchasedCourse: [{type: MongoDB.Schema.Types.ObjectId, ref: 'Course'}]
+});
 
-MongoDB.connect(
-  `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_CLUSTER_NAME}.hcfjutf.mongodb.net/${DB_NAME}`,
-  { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('DB Connected Successfully'))
-  .catch(err => console.log("Error detected in connecting Database: ", err));
+const ADMIN = new MongoDB.Schema({
+  username: String,
+  password: String
+});
+
+const COURSE = new MongoDB.Schema({
+  title: String,
+  description: String,
+  price: Number,
+  imageLink: String,
+  published: Boolean,
+});
+
+// Database Models
+const User = MongoDB.model("USER", USER)
+const Admin = MongoDB.model("ADMIN", ADMIN)
+const Course = MongoDB.model("COURSE", COURSE)
 
 // Admin routes
 app.post("/admin/signup", (req, res) => {
@@ -59,6 +72,19 @@ app.post("/users/courses/:courseId", (req, res) => {
 app.get("/users/purchasedCourses", (req, res) => {
   // logic to view purchased courses
 });
+
+// URL Connect Link to database
+const DB_USERNAME = String(process.env.DB_USERNAME);
+const DB_PASSWORD = String(process.env.DB_PASSWORD);
+const DB_CLUSTER_NAME = String(process.env.DB_CLUSTER_NAME);
+const DB_NAME = String(process.env.DB_NAME);
+
+MongoDB.connect(
+  `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_CLUSTER_NAME}.hcfjutf.mongodb.net/${DB_NAME}`,
+  { useNewUrlParser: true, useUnifiedTopology: true }
+)
+  .then(() => console.log("DB Connected Successfully"))
+  .catch((err) => console.log("Error detected in connecting Database: ", err));
 
 app.listen(3000, () => {
   console.log("Server is listening on port 3000");
