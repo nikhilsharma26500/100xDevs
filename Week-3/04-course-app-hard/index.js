@@ -56,7 +56,7 @@ app.post("/admin/signup", async (req, res) => {
   const { username, password } = req.body;
   const admin = await Admin.findOne({ username, password });
   if(admin){
-    res.status(403).json({message: "Admin account alreadt exists!"})
+    res.status(403).json({message: "Admin account already exists!"})
   }else{
     const obj = {username: username, password: password}
     const adminVal = new Admin(obj)
@@ -68,6 +68,14 @@ app.post("/admin/signup", async (req, res) => {
 
 app.post("/admin/login", async (req, res) => {
   // logic to log in admin
+  const {username, password} = req.headers
+  const admin = await Admin.findOne({username, password})
+  if(admin){
+    const token = jwt.sign({username, role: 'admin'}, secret, {expiresIn: '1hr'})
+    res.status(200).json({message: "Admin account logged in!", token})
+  }else{
+    res.status(401).json({message: "Admin account does not exist!"})
+  }
 });
 
 app.post("/admin/courses", auth, async (req, res) => {
