@@ -87,12 +87,21 @@ app.post("/admin/login", async (req, res) => {
 app.post("/admin/courses", auth, async (req, res) => {
   // logic to create a course
   const course = new Course(req.body);
-  course.save();
+  await course.save();
   res.status(200).json({ message: "New Course Added!", course: course.id });
 });
 
 app.put("/admin/courses/:courseId", auth, async (req, res) => {
   // logic to edit a course
+  const course = await Course.findByIdAndUpdate(req.params.courseId, req.body, {
+    new: true,
+  });
+  // await course.save();
+  if(course){
+    res.status(200).json({message: "Course updated", courseDescription: course})
+  }else{
+    res.status(403).json({message: "Course could not be added."})
+  }
 });
 
 app.get("/admin/courses", auth, async (req, res) => {
