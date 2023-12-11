@@ -106,6 +106,8 @@ app.put("/admin/courses/:courseId", auth, async (req, res) => {
 
 app.get("/admin/courses", auth, async (req, res) => {
   // logic to get all courses
+  const courses = await Course.find({})
+  res.status(200).json({Courses: courses})
 });
 
 // User routes
