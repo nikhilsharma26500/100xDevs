@@ -4,7 +4,7 @@ const MongoDB = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 app.use(express.json());
-require("dotenv").config({path: __dirname + '/../.env'});
+require("dotenv").config({ path: __dirname + "/../.env" });
 
 // Database Schemas
 const USER = new MongoDB.Schema({
@@ -55,31 +55,40 @@ app.post("/admin/signup", async (req, res) => {
   // logic to sign up admin
   const { username, password } = req.body;
   const admin = await Admin.findOne({ username, password });
-  if(admin){
-    res.status(403).json({message: "Admin account already exists!"})
-  }else{
-    const obj = {username: username, password: password}
-    const adminVal = new Admin(obj)
-    adminVal.save()
-    const token = jwt.sign({username, role: 'admin'}, secret, {expiresIn: '1hr'})
-    res.status(200).json({message: "Admin account created successfully!", token})
+  if (admin) {
+    res.status(403).json({ message: "Admin account already exists!" });
+  } else {
+    const obj = { username: username, password: password };
+    const adminVal = new Admin(obj);
+    adminVal.save();
+    const token = jwt.sign({ username, role: "admin" }, secret, {
+      expiresIn: "1hr",
+    });
+    res
+      .status(200)
+      .json({ message: "Admin account created successfully!", token });
   }
 });
 
 app.post("/admin/login", async (req, res) => {
   // logic to log in admin
-  const {username, password} = req.headers
-  const admin = await Admin.findOne({username, password})
-  if(admin){
-    const token = jwt.sign({username, role: 'admin'}, secret, {expiresIn: '1hr'})
-    res.status(200).json({message: "Admin account logged in!", token})
-  }else{
-    res.status(401).json({message: "Admin account does not exist!"})
+  const { username, password } = req.headers;
+  const admin = await Admin.findOne({ username, password });
+  if (admin) {
+    const token = jwt.sign({ username, role: "admin" }, secret, {
+      expiresIn: "1hr",
+    });
+    res.status(200).json({ message: "Admin account logged in!", token });
+  } else {
+    res.status(401).json({ message: "Admin account does not exist!" });
   }
 });
 
 app.post("/admin/courses", auth, async (req, res) => {
   // logic to create a course
+  const course = new Course(req.body);
+  course.save();
+  res.status(200).json({ message: "New Course Added!", course: course.id });
 });
 
 app.put("/admin/courses/:courseId", auth, async (req, res) => {
